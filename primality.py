@@ -6,7 +6,7 @@ step=4
 last = lambda pl: pl[len(pl)-1]
 
 def isPrime(n):
-	print primeSeed
+	global primeSeed
 	if n<last(primeSeed):
 	# if n is less than 10, then just check if it is in primeSeed
 		if n in primeSeed:
@@ -26,27 +26,29 @@ def isPrime(n):
 	else:
 	# I do not have enough primes to test this number
 	# let me extend primes upto sqrt(n) and then check
+		global step
+		nextPrime = last(primeSeed)+step
+		step=6-step
+		foundPrime=False
 		while True:
 		# loop to add one prime to primeSeed
-		# this loop adds one prime at a time
-			global step
-			nextPrime = last(primeSeed)+step
-			step=6-step
-			foundPrime=False
+		# check if nextPrime is a prime
 			for p in primeSeed:
-				if p*p>nextPrime:
-					foundPrime=True
-					break
 				if nextPrime%p:
+					if p*p>nextPrime:
+						foundPrime=True
+						break
 					continue
 				else:
-					nextPrime+=step
-					step=6-step
+					break
 			if foundPrime:
 				primeSeed.append(nextPrime)
 				if last(primeSeed)*last(primeSeed)>n:
 				# I have found enough primes now
 				# I can call myself to check if n is a prime now
 					return isPrime(n)
+			foundPrime=False
+			nextPrime+=step
+			step=6-step
 
-print isPrime(9973)
+print isPrime(10**14+1)
